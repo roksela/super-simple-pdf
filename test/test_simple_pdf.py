@@ -57,23 +57,23 @@ class TestSimplePdf(unittest.TestCase):
 
     def testWords(self):
         pdf = super_simple_pdf.SimplePdf("test1.pdf")
-        pdf.addText("First")
-        pdf.addText("Second")
-        pdf.addText("Bye!")
+        pdf.add_text("First")
+        pdf.add_text("Second")
+        pdf.add_text("Bye!")
         pdf.save()
 
     def testNormalText(self):
         pdf = super_simple_pdf.SimplePdf("test2.pdf")
 
-        pdf.addText(self.text)
+        pdf.add_text(self.text)
         pdf.save()
 
     def testLongText(self):
         pdf = super_simple_pdf.SimplePdf("test3.pdf")
 
-        pdf.addText(self.text)
-        pdf.addText(self.text)
-        pdf.addText(self.text)
+        pdf.add_text(self.text)
+        pdf.add_text(self.text)
+        pdf.add_text(self.text)
         pdf.save()
 
 if __name__ == '__main__':

@@ -12,7 +12,7 @@ class SimplePdf(object):
         self.styles = getSampleStyleSheet()
         self.styles.add(ParagraphStyle(name='SimpleStyle', fontSize=12, leading=18))
 
-    def addText(self, text):
+    def add_text(self, text):
         content = str(text).replace('\n', '<br />\n')
         self.parts.append(Paragraph(content, self.styles["SimpleStyle"]))
         self.parts.append(Spacer(1, 12))
