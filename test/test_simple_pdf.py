@@ -49,30 +49,40 @@ class TestSimplePdf(unittest.TestCase):
            "pulvinar. Ullamcorper velit sed ullamcorper morbi tincidunt ornare massa eget " \
            "egestas. Integer eget aliquet nibh praesent tristique."
 
-    def setUp(self):
-        pass
+    long_header = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor " \
+           "incididunt ut labore et dolore magna aliqua."
 
-    def tearDown(self):
-        pass
+    short_header = "Integer eget aliquet"
 
-    def testWords(self):
+    def test_words(self):
         pdf = super_simple_pdf.SimplePdf("test1.pdf")
         pdf.add_text("First")
         pdf.add_text("Second")
         pdf.add_text("Bye!")
         pdf.save()
 
-    def testNormalText(self):
+    def test_normal_text(self):
         pdf = super_simple_pdf.SimplePdf("test2.pdf")
 
         pdf.add_text(self.text)
         pdf.save()
 
-    def testLongText(self):
+    def test_long_text(self):
         pdf = super_simple_pdf.SimplePdf("test3.pdf")
 
         pdf.add_text(self.text)
         pdf.add_text(self.text)
+        pdf.add_text(self.text)
+        pdf.save()
+
+    def test_long_text_with_headers(self):
+        pdf = super_simple_pdf.SimplePdf("test4.pdf")
+
+        pdf.add_header(self.long_header)
+        pdf.add_text(self.text)
+        pdf.add_header(self.short_header)
+        pdf.add_text(self.text)
+        pdf.add_header(self.short_header)
         pdf.add_text(self.text)
         pdf.save()
 
