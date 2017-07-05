@@ -24,6 +24,12 @@ class SimplePdf(object):
         self.parts.append(Paragraph(content, self.styles["SimpleHeaderStyle"]))
         self.parts.append(Spacer(1, 10))
 
+    def add_image(self, filename):
+        image = Image(filename)
+        # TODO: fit images larger than page width
+        self.parts.append(image)
+        self.parts.append(Spacer(1, 10))
+
     def save(self):
         doc = SimpleDocTemplate(self.filename, pagesize=letter,
                                 rightMargin=72, leftMargin=72,

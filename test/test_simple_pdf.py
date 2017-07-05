@@ -54,6 +54,9 @@ class TestSimplePdf(unittest.TestCase):
 
     short_header = "Integer eget aliquet"
 
+    large_image_filename = "resources/amsterdam_large_by_kris_roksela.jpg"
+    small_image_filename = "resources/amsterdam_small_by_kris_roksela.jpg"
+
     def test_words(self):
         pdf = super_simple_pdf.SimplePdf("test1.pdf")
         pdf.add_text("First")
@@ -85,6 +88,29 @@ class TestSimplePdf(unittest.TestCase):
         pdf.add_header(self.short_header)
         pdf.add_text(self.text)
         pdf.save()
+
+    def test_image(self):
+        pdf = super_simple_pdf.SimplePdf("test5.pdf")
+        pdf.add_text("First")
+        pdf.add_image(self.small_image_filename)
+        pdf.save()
+
+    def test_text_with_image(self):
+        pdf = super_simple_pdf.SimplePdf("test6.pdf")
+        pdf.add_header(self.short_header)
+        pdf.add_header(self.short_header)
+        pdf.add_header(self.short_header)
+        pdf.add_text(self.text)
+        pdf.add_image(self.small_image_filename)
+        pdf.save()
+
+    @unittest.skip("handling large images hasn't been implemented yet")
+    def test_large_image(self):
+        pdf = super_simple_pdf.SimplePdf("test7.pdf")
+        pdf.add_text("Large")
+        pdf.add_image(self.large_image_filename)
+        pdf.save()
+
 
 if __name__ == '__main__':
     unittest.main()
