@@ -1,5 +1,6 @@
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
 
@@ -9,6 +10,9 @@ class SimplePdf(object):
     _default_spacer_height = 10
     _default_spacer_width = 1
     _default_margin = 72
+    _default_font_size = 10
+    _default_header_font_size = 20
+    _default_leading_ratio = 1.5
 
     def __init__(self, filename, page_size=_default_page_size):
         self.filename = filename
@@ -17,29 +21,28 @@ class SimplePdf(object):
         self.spacer_height = SimplePdf._default_spacer_height
         self.spacer_width = SimplePdf._default_spacer_width
         self.margin = SimplePdf._default_margin
+        self.font_size = SimplePdf._default_font_size
+        self.header_font_size = SimplePdf._default_header_font_size
+        self.leading_ratio = SimplePdf._default_leading_ratio
 
         self.styles = getSampleStyleSheet()
-        self.styles.add(ParagraphStyle(name='SimpleStyle', fontSize=10, leading=15))
-        self.styles.add(ParagraphStyle(name='SimpleHeaderStyle', fontSize=20, leading=30))
-
-    @staticmethod
-    def _prepare_text_for_reportlab(text):
-        # reportlab needs html tag to preserve end of line
-        content = str(text).replace('\n', '<br />\n')
-        return content
+        self.styles.add(ParagraphStyle(name='SimpleStyle', fontSize=self.font_size,
+                                       leading=self.font_size * self.leading_ratio))
+        self.styles.add(ParagraphStyle(name='SimpleHeaderStyle', fontSize=self.header_font_size,
+                                       leading=self.header_font_size * self.leading_ratio))
 
     def add_text(self, text):
         content = SimplePdf._prepare_text_for_reportlab(text)
 
         self.parts.append(Paragraph(content, self.styles["SimpleStyle"]))
-        self.parts.append(Spacer(self.spacer_width, self.spacer_height))
+        self._add_some_space()
 
     def add_header(self, header):
         content = SimplePdf._prepare_text_for_reportlab(header)
 
-        self.parts.append(Spacer(self.spacer_width, self.spacer_height))
+        self._add_some_space()
         self.parts.append(Paragraph(content, self.styles["SimpleHeaderStyle"]))
-        self.parts.append(Spacer(self.spacer_width, self.spacer_height))
+        self._add_some_space()
 
     def add_image(self, filename):
         original_image = Image(filename)
@@ -50,7 +53,28 @@ class SimplePdf(object):
         image = Image(filename, width=width, height=(width * aspect_ratio))
 
         self.parts.append(image)
-        self.parts.append(Spacer(self.spacer_width, self.spacer_height))
+        self._add_some_space()
+
+    def add_table(self, data):
+
+        row_count = len(data)
+        column_count = len(data[0])
+
+        # wrap text in all cells
+        matrix = []
+        for x in range(row_count):
+            row = []
+            for y in range(column_count):
+                row.append(self._wrap_text(data[x][y]))
+            matrix.append(row)
+
+        table = Table(matrix)
+        # set all borders black
+        table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 1, colors.black),
+                               ('BOX', (0, 0), (-1, -1), 1, colors.black)]))
+
+        self.parts.append(table)
+        self._add_some_space()
 
     def save(self):
         doc = SimpleDocTemplate(self.filename, pagesize=self.page_size,
@@ -58,3 +82,18 @@ class SimplePdf(object):
                                 topMargin=self.margin, bottomMargin=self.margin)
 
         doc.build(self.parts)
+
+    def _add_some_space(self):
+        self.parts.append(Spacer(self.spacer_width, self.spacer_height))
+
+    def _wrap_text(self, text):
+        # convert text to Paragraph
+        # text in Paragraphs is wrapped automatically
+        paragraph = Paragraph(text, self.styles["SimpleStyle"])
+        return paragraph
+
+    @staticmethod
+    def _prepare_text_for_reportlab(text):
+        # reportlab needs html tag to preserve end of line
+        content = str(text).replace('\n', '<br />\n')
+        return content

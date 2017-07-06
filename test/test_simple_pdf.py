@@ -1,7 +1,14 @@
 import unittest
 from super_simple_pdf import SimplePdf
 
+
 class TestSimplePdf(unittest.TestCase):
+
+    short_text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor " \
+           "incididunt ut labore et dolore magna aliqua. Viverra suspendisse potenti nullam " \
+           "ac. Aliquam nulla facilisi cras fermentum odio eu feugiat pretium nibh. " \
+           "Porttitor rhoncus dolor purus non enim praesent elementum facilisis. Vitae " \
+           "tortor condimentum lacinia quis."
 
     text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor " \
            "incididunt ut labore et dolore magna aliqua. Viverra suspendisse potenti nullam " \
@@ -49,7 +56,7 @@ class TestSimplePdf(unittest.TestCase):
            "egestas. Integer eget aliquet nibh praesent tristique."
 
     long_header = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor " \
-           "incididunt ut labore et dolore magna aliqua."
+        "incididunt ut labore et dolore magna aliqua."
 
     short_header = "Integer eget aliquet"
 
@@ -104,15 +111,62 @@ class TestSimplePdf(unittest.TestCase):
         pdf.add_header(self.short_header)
         pdf.add_text(self.text)
         pdf.add_image(self.small_image_filename)
+        pdf.add_text("End line")
         pdf.save()
 
     def test_large_image(self):
         pdf = SimplePdf("test7.pdf")
 
-        pdf.add_text("Large")
+        pdf.add_text(self.short_text)
         pdf.add_image(self.large_image_filename)
+        pdf.add_text(self.short_text)
         pdf.save()
 
+    def test_table(self):
+        pdf = SimplePdf("test8.pdf")
+
+        pdf.add_text(self.short_text)
+        data = [("First Name", "Last Name", "Email"),
+                ("John", "Red", "j.red@example.org"),
+                ("Sarah", "Leitz", "s.leitz@example.org"),
+                ("Tom", "Porter", "t.porter@example.org"),
+                ("Christie", "Owl", "c.owl@example.org")]
+        pdf.add_table(data)
+        pdf.add_text(self.short_text)
+        pdf.save()
+
+    def test_table_many_columns(self):
+        pdf = SimplePdf("test9.pdf")
+
+        pdf.add_text(self.short_text)
+        data = [("First Name", "Last Name", "Email",
+                 "First Name", "Last Name", "Email", "First Name", "Last Name", "Email"),
+                ("John", "Red", "j.red example.org",
+                 "John", "Red", "j.red example.org", "John", "Red", "j.red example.org"),
+                ("Sarah", "Leitz", "s.leitz example.org",
+                 "Sarah", "Leitz", "s.leitz example.org", "Sarah", "Leitz", "s.leitz example.org"),
+                ("Tom", "Porter", "t.porter example.org",
+                 "Tom", "Porter", "t.porter example.org", "Tom", "Porter", "t.porter example.org"),
+                ("Christie", "Owl", "c.owl example.org",
+                 "Christie", "Owl", "c.owl example.org", "Christie", "Owl", "c.owl example.org")]
+        pdf.add_table(data)
+        pdf.add_text(self.short_text)
+        pdf.save()
+
+    def test_large_table(self):
+        pdf = SimplePdf("test10.pdf")
+
+        pdf.add_text(self.short_text)
+        data = [("First Name", "Last Name", "Email"),
+                (self.short_text, self.short_text, "j.red@example.org"),
+                (self.short_text, self.short_text, "s.leitz@example.org"),
+                (self.short_text, self.short_text, "t.porter@example.org"),
+                (self.short_text, self.short_text, "c.owl@example.org")]
+        pdf.add_table(data)
+        pdf.add_text(self.short_text)
+        pdf.save()
+
+    # TODO: run actual test assertions in each test
 
 if __name__ == '__main__':
     unittest.main()
