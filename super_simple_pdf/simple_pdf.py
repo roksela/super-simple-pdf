@@ -57,18 +57,9 @@ class SimplePdf(object):
 
     def add_table(self, data):
 
-        row_count = len(data)
-        column_count = len(data[0])
-
-        # wrap text in all cells
-        matrix = []
-        for x in range(row_count):
-            row = []
-            for y in range(column_count):
-                row.append(self._wrap_text(data[x][y]))
-            matrix.append(row)
-
+        matrix = [[self._wrap_text(cell) for cell in row] for row in data]
         table = Table(matrix)
+
         # set all borders black
         table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 1, colors.black),
                                ('BOX', (0, 0), (-1, -1), 1, colors.black)]))
