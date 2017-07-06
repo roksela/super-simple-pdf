@@ -1,6 +1,5 @@
 import unittest
-import super_simple_pdf
-
+from super_simple_pdf import SimplePdf
 
 class TestSimplePdf(unittest.TestCase):
 
@@ -58,20 +57,21 @@ class TestSimplePdf(unittest.TestCase):
     small_image_filename = "resources/amsterdam_small_by_kris_roksela.jpg"
 
     def test_words(self):
-        pdf = super_simple_pdf.SimplePdf("test1.pdf")
+        pdf = SimplePdf("test1.pdf")
+
         pdf.add_text("First")
         pdf.add_text("Second")
         pdf.add_text("Bye!")
         pdf.save()
 
     def test_normal_text(self):
-        pdf = super_simple_pdf.SimplePdf("test2.pdf")
+        pdf = SimplePdf("test2.pdf")
 
         pdf.add_text(self.text)
         pdf.save()
 
     def test_long_text(self):
-        pdf = super_simple_pdf.SimplePdf("test3.pdf")
+        pdf = SimplePdf("test3.pdf")
 
         pdf.add_text(self.text)
         pdf.add_text(self.text)
@@ -79,7 +79,7 @@ class TestSimplePdf(unittest.TestCase):
         pdf.save()
 
     def test_long_text_with_headers(self):
-        pdf = super_simple_pdf.SimplePdf("test4.pdf")
+        pdf = SimplePdf("test4.pdf")
 
         pdf.add_header(self.long_header)
         pdf.add_text(self.text)
@@ -90,13 +90,15 @@ class TestSimplePdf(unittest.TestCase):
         pdf.save()
 
     def test_image(self):
-        pdf = super_simple_pdf.SimplePdf("test5.pdf")
+        pdf = SimplePdf("test5.pdf")
+
         pdf.add_text("First")
         pdf.add_image(self.small_image_filename)
         pdf.save()
 
     def test_text_with_image(self):
-        pdf = super_simple_pdf.SimplePdf("test6.pdf")
+        pdf = SimplePdf("test6.pdf")
+
         pdf.add_header(self.short_header)
         pdf.add_header(self.short_header)
         pdf.add_header(self.short_header)
@@ -104,9 +106,9 @@ class TestSimplePdf(unittest.TestCase):
         pdf.add_image(self.small_image_filename)
         pdf.save()
 
-    @unittest.skip("handling large images hasn't been implemented yet")
     def test_large_image(self):
-        pdf = super_simple_pdf.SimplePdf("test7.pdf")
+        pdf = SimplePdf("test7.pdf")
+
         pdf.add_text("Large")
         pdf.add_image(self.large_image_filename)
         pdf.save()
