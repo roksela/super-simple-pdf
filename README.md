@@ -2,8 +2,11 @@
 Super simple PDF generation in Python.
 This library helps to create simple documents based on your content.
 
-We support adding headers, text, images and tables. No fancy colors or fonts.
+We support headers, text, images and tables. No fancy colors or fonts.
+
 Perfect solution if you just need to put your content into a PDF.
+
+This project uses ReportLab open-source PDF Toolkit.
 
 ## Getting Started
 
