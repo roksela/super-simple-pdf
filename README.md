@@ -34,11 +34,11 @@ from super_simple_pdf import SimplePdf
 pdf = SimplePdf("test2.pdf")
 
 pdf.add_text("Text")
-data = [("First Name", "Last Name", "Email"),
-        ("John", "Red", "j.red@example.org"),
-        ("Sarah", "Leitz", "s.leitz@example.org"),
-        ("Tom", "Porter", "t.porter@example.org"),
-        ("Christie", "Owl", "c.owl@example.org")]
+data = [["First Name", "Last Name", "Email"],
+        ["John", "Red", "j.red@example.org"],
+        ["Sarah", "Leitz", "s.leitz@example.org"],
+        ["Tom", "Porter", "t.porter@example.org"],
+        ["Christie", "Owl", "c.owl@example.org"]]
 pdf.add_table(data)
 
 pdf.save()

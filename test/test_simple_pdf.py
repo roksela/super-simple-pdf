@@ -63,8 +63,13 @@ class TestSimplePdf(unittest.TestCase):
     large_image_filename = "resources/amsterdam_large_by_kris_roksela.jpg"
     small_image_filename = "resources/amsterdam_small_by_kris_roksela.jpg"
 
+    def test_no_content(self):
+        pdf = SimplePdf(self._testMethodName + ".pdf")
+
+        pdf.save()
+
     def test_words(self):
-        pdf = SimplePdf("test1.pdf")
+        pdf = SimplePdf(self._testMethodName + ".pdf")
 
         pdf.add_text("First")
         pdf.add_text("Second")
@@ -72,13 +77,13 @@ class TestSimplePdf(unittest.TestCase):
         pdf.save()
 
     def test_normal_text(self):
-        pdf = SimplePdf("test2.pdf")
+        pdf = SimplePdf(self._testMethodName + ".pdf")
 
         pdf.add_text(self.text)
         pdf.save()
 
     def test_long_text(self):
-        pdf = SimplePdf("test3.pdf")
+        pdf = SimplePdf(self._testMethodName + ".pdf")
 
         pdf.add_text(self.text)
         pdf.add_text(self.text)
@@ -86,7 +91,7 @@ class TestSimplePdf(unittest.TestCase):
         pdf.save()
 
     def test_long_text_with_headers(self):
-        pdf = SimplePdf("test4.pdf")
+        pdf = SimplePdf(self._testMethodName + ".pdf")
 
         pdf.add_header(self.long_header)
         pdf.add_text(self.text)
@@ -97,14 +102,14 @@ class TestSimplePdf(unittest.TestCase):
         pdf.save()
 
     def test_image(self):
-        pdf = SimplePdf("test5.pdf")
+        pdf = SimplePdf(self._testMethodName + ".pdf")
 
         pdf.add_text("First")
         pdf.add_image(self.small_image_filename)
         pdf.save()
 
     def test_text_with_image(self):
-        pdf = SimplePdf("test6.pdf")
+        pdf = SimplePdf(self._testMethodName + ".pdf")
 
         pdf.add_header(self.short_header)
         pdf.add_header(self.short_header)
@@ -115,7 +120,7 @@ class TestSimplePdf(unittest.TestCase):
         pdf.save()
 
     def test_large_image(self):
-        pdf = SimplePdf("test7.pdf")
+        pdf = SimplePdf(self._testMethodName + ".pdf")
 
         pdf.add_text(self.short_text)
         pdf.add_image(self.large_image_filename)
@@ -123,45 +128,119 @@ class TestSimplePdf(unittest.TestCase):
         pdf.save()
 
     def test_table(self):
-        pdf = SimplePdf("test8.pdf")
+        pdf = SimplePdf(self._testMethodName + ".pdf")
 
         pdf.add_text(self.short_text)
-        data = [("First Name", "Last Name", "Email"),
-                ("John", "Red", "j.red@example.org"),
-                ("Sarah", "Leitz", "s.leitz@example.org"),
-                ("Tom", "Porter", "t.porter@example.org"),
-                ("Christie", "Owl", "c.owl@example.org")]
+        data = [["First Name", "Last Name", "Email"],
+                ["John", "Red", "j.red@example.org"],
+                ["Sarah", "Leitz", "s.leitz@example.org"],
+                ["Tom", "Porter", "t.porter@example.org"],
+                ["Christie", "Owl", "c.owl@example.org"]]
         pdf.add_table(data)
         pdf.add_text(self.short_text)
         pdf.save()
 
     def test_table_many_columns(self):
-        pdf = SimplePdf("test9.pdf")
+        pdf = SimplePdf(self._testMethodName + ".pdf")
 
         pdf.add_text(self.short_text)
-        data = [("First Name", "Last Name", "Email",
-                 "First Name", "Last Name", "Email", "First Name", "Last Name", "Email"),
-                ("John", "Red", "j.red example.org",
-                 "John", "Red", "j.red example.org", "John", "Red", "j.red example.org"),
-                ("Sarah", "Leitz", "s.leitz example.org",
-                 "Sarah", "Leitz", "s.leitz example.org", "Sarah", "Leitz", "s.leitz example.org"),
-                ("Tom", "Porter", "t.porter example.org",
-                 "Tom", "Porter", "t.porter example.org", "Tom", "Porter", "t.porter example.org"),
-                ("Christie", "Owl", "c.owl example.org",
-                 "Christie", "Owl", "c.owl example.org", "Christie", "Owl", "c.owl example.org")]
+        data = [["First Name", "Last Name", "Email",
+                 "First Name", "Last Name", "Email", "First Name", "Last Name", "Email"],
+                ["John", "Red", "j.red example.org",
+                 "John", "Red", "j.red example.org", "John", "Red", "j.red example.org"],
+                ["Sarah", "Leitz", "s.leitz example.org",
+                 "Sarah", "Leitz", "s.leitz example.org", "Sarah", "Leitz", "s.leitz example.org"],
+                ["Tom", "Porter", "t.porter example.org",
+                 "Tom", "Porter", "t.porter example.org", "Tom", "Porter", "t.porter example.org"],
+                ["Christie", "Owl", "c.owl example.org",
+                 "Christie", "Owl", "c.owl example.org", "Christie", "Owl", "c.owl example.org"]]
         pdf.add_table(data)
         pdf.add_text(self.short_text)
         pdf.save()
 
     def test_large_table(self):
-        pdf = SimplePdf("test10.pdf")
+        pdf = SimplePdf(self._testMethodName + ".pdf")
 
         pdf.add_text(self.short_text)
-        data = [("First Name", "Last Name", "Email"),
-                (self.short_text, self.short_text, "j.red@example.org"),
-                (self.short_text, self.short_text, "s.leitz@example.org"),
-                (self.short_text, self.short_text, "t.porter@example.org"),
-                (self.short_text, self.short_text, "c.owl@example.org")]
+        data = [["First Name", "Last Name", "Email"],
+                [self.short_text, self.short_text, "j.red@example.org"],
+                [self.short_text, self.short_text, "s.leitz@example.org"],
+                [self.short_text, self.short_text, "t.porter@example.org"],
+                [self.short_text, self.short_text, "c.owl@example.org"]]
+        pdf.add_table(data)
+        pdf.add_text(self.short_text)
+        pdf.save()
+
+    def test_filename_later(self):
+        pdf = SimplePdf()
+
+        pdf.add_text("First")
+        pdf.add_text("Second")
+        pdf.add_text("Bye!")
+        pdf.filename = self._testMethodName + ".pdf"
+        pdf.save()
+
+    def test_filename_save_twice(self):
+        pdf = SimplePdf()
+
+        pdf.add_text("First")
+        pdf.add_text("Second")
+        pdf.add_text("Bye!")
+        pdf.filename = self._testMethodName + "_1.pdf"
+        pdf.save()
+
+        print(pdf.parts)
+        pdf.filename = self._testMethodName + "_2.pdf"
+        pdf.save()
+
+    def test_no_filename(self):
+        pdf = SimplePdf()
+
+        pdf.add_text("First")
+        pdf.add_text("Second")
+        pdf.add_text("Bye!")
+
+        with self.assertRaises(TypeError):
+            pdf.save()
+
+    def test_custom_page_size(self):
+        pdf = SimplePdf(self._testMethodName + ".pdf", (500, 500))
+
+        pdf.add_text("First")
+        pdf.add_text("Second")
+        pdf.add_text("Bye!")
+        pdf.save()
+
+    def test_table_one_row(self):
+        pdf = SimplePdf(self._testMethodName + ".pdf")
+
+        pdf.add_text(self.short_text)
+        data = [["First Name", "Last Name", "Email"]]
+        pdf.add_table(data)
+        pdf.add_text(self.short_text)
+        pdf.save()
+
+    def test_table_irregular(self):
+        pdf = SimplePdf(self._testMethodName + ".pdf")
+
+        pdf.add_text(self.short_text)
+        data = [["First Name", "Last Name", "Email", "Address"],
+                ["John", "Red"],
+                ["Sarah", "Leitz", "s.leitz@example.org"],
+                ["Tom", "Porter"],
+                ["Christie", "Owl", "c.owl@example.org"]]
+        pdf.add_table(data)
+        pdf.add_text(self.short_text)
+        pdf.save()
+
+    def test_table_irregular_2(self):
+        pdf = SimplePdf(self._testMethodName + ".pdf")
+
+        pdf.add_text(self.short_text)
+        data = [["First Name", "Last Name"],
+                ["Sarah", "Leitz", "s.leitz@example.org", "Buffalo, NY"],
+                ["Tom", "Porter"],
+                ["Christie", "Owl", "c.owl@example.org"]]
         pdf.add_table(data)
         pdf.add_text(self.short_text)
         pdf.save()
